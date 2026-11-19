@@ -7,16 +7,20 @@ from tools.final_answer import FinalAnswerTool
 
 from Gradio_UI import GradioUI
 
-# Below is an example of a tool that does nothing. Amaze us with your creativity !
 @tool
-def my_custom_tool(arg1:str, arg2:int)-> str: #it's import to specify the return type
-    #Keep this format for the description / args / args description but feel free to modify the tool
-    """A tool that does nothing yet 
+def get_days_until(date:str)-> str:
+    """A tool that gets days until date
     Args:
-        arg1: the first argument
-        arg2: the second argument
+        date: a string representing the date to calculate days until (e.g. YYYY-MM-DD)
     """
-    return "What magic will you build ?"
+
+    try:
+        today = datetime.datetime.now().date()
+        parsed = datetime.datetime.strptime(date, "%Y-%m-%d").date()
+        days = (parsed - today).days
+        return f"There are {days} days until {date}"
+    except Exception as e:
+        return f"Error fetching days until {date}: {str(e)}"
 
 @tool
 def get_current_time_in_timezone(timezone: str) -> str:
@@ -54,7 +58,7 @@ with open("prompts.yaml", 'r') as stream:
     
 agent = CodeAgent(
     model=model,
-    tools=[final_answer], ## add your tools here (don't remove final answer)
+    tools=[final_answer, get_current_time_in_timezone, get_days_until], ## add your tools here (don't remove final answer)
     max_steps=6,
     verbosity_level=1,
     grammar=None,
@@ -65,4 +69,5 @@ agent = CodeAgent(
 )
 
 
-GradioUI(agent).launch()
+if __name__ == "__main__":
+    GradioUI(agent).launch()
