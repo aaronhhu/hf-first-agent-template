@@ -9,9 +9,12 @@ from Gradio_UI import GradioUI
 
 @tool
 def get_days_until(date:str)-> str:
-    """A tool that gets days until date
+    """Calculates how many days are left from today until a given date.
+    Use this for questions like "how many days until Christmas?" or "days until 2026-12-25".
+    If the user names a holiday or event (e.g. Christmas, Thanksgiving), first convert it
+    to its next upcoming calendar date and pass that date in YYYY-MM-DD format.
     Args:
-        date: a string representing the date to calculate days until (e.g. YYYY-MM-DD)
+        date: the target date, strictly in YYYY-MM-DD format (e.g. '2026-12-25')
     """
 
     try:

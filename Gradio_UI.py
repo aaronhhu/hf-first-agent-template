@@ -153,7 +153,8 @@ def stream_to_gradio(
         ):
             yield message
 
-    final_answer = step_log  # Last log is the run's final_answer
+    # Last log is the run's final answer; newer smolagents wraps it in a FinalAnswerStep
+    final_answer = getattr(step_log, "final_answer", step_log)
     final_answer = handle_agent_output_types(final_answer)
 
     if isinstance(final_answer, AgentText):
